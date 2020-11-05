@@ -18,7 +18,9 @@
     "build": "midway-bin build -c && rm -rf ./dist/.mwcc-cache",
     "test": "midway-bin test --ts --full-trace",
     "cov": "midway-bin cov --ts",
-    "clean": "midway-bin clean"
+    "clean": "midway-bin clean",
+    "lint": "mwts check",
+    "lint:fix": "mwts fix"
   },
   "repository": {
     "type": "git",
