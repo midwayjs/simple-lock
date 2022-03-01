@@ -64,6 +64,10 @@ export default class SimpleLock {
             }
           })
           .catch(err => {
+            if (this.q.get(localKey).fns.length > 0) {
+              this.q.get(localKey).fns = [];
+            }
+
             deferredReject(err);
           });
 
@@ -113,6 +117,10 @@ export default class SimpleLock {
           this.q.get(key).resolved = true;
         })
         .catch(err => {
+          if (this.q.get(key).fns.length > 0) {
+            this.q.get(key).fns = [];
+          }
+
           deferredReject(err);
 
           this.q.get(key).resolved = true;

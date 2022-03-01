@@ -30,6 +30,24 @@ describe('simple lock', () => {
     assert(i === 1);
   });
 
+  it('sureOnce throw error should be ok', async () => {
+    const lock = new SimpleLock();
+    
+    let ee;
+    try {
+      await lock.sureOnce(async () => {
+        (lock as any).q.get('_default_simple_lock_queue').fns.push(() => console.log('test'));
+
+        throw new Error('11');
+      })
+    } catch (e) {
+      ee = e.message;
+    }
+
+    assert.deepEqual(ee, '11');
+    assert.deepEqual((lock as any).q.get('_default_simple_lock_queue').fns.length, 0);
+  });
+
   it('acquire should be ok', async () => {
     const lock = new SimpleLock();
     let i = 0;
@@ -54,5 +72,24 @@ describe('simple lock', () => {
     assert.deepEqual([0, 1, 2], rets);
     assert(3 === i);
     assert.deepEqual([11, 2, 3], data);
+  });
+
+  it('acquire throw error should be ok', async () => {
+    const lock = new SimpleLock();
+    
+    let ee;
+    try {
+      await lock.acquire('hello', async () => {
+
+        (lock as any).q.get('hello').fns.push(() => console.log('test'));
+
+        throw new Error('11');
+      });
+    } catch (e) {
+      ee = e.message;
+    }
+
+    assert.deepEqual(ee, '11');
+    assert.deepEqual((lock as any).q.get('hello').fns.length, 0);
   });
 });

@@ -8,6 +8,7 @@
   ],
   "devDependencies": {
     "@midwayjs/cli": "^1.0.0",
+    "@types/mocha": "^9.1.0",
     "mwts": "^1.0.5",
     "typescript": "^3.9.0"
   },
@@ -16,7 +17,7 @@
   },
   "scripts": {
     "build": "midway-bin build -c && rm -rf ./dist/.mwcc-cache",
-    "test": "midway-bin test --ts --full-trace",
+    "test": "midway-bin test --ts",
     "cov": "midway-bin cov --ts",
     "clean": "midway-bin clean",
     "lint": "mwts check",
