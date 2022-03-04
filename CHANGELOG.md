@@ -1,3 +1,10 @@
+
+1.2.0 / 2022-03-01
+==================
+
+  * feat: add error empty fns (#2)
+  * chore: add lint
+  * first commit
 # Change Log
 
 All notable changes to this project will be documented in this file.
