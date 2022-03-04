@@ -10,6 +10,10 @@ class Item {
     this.fns = [];
     this.resolved = false;
   }
+
+  isEmpty(): boolean {
+    return this.fns.length === 0;
+  }
 }
 
 class Queue {
@@ -65,7 +69,7 @@ export default class SimpleLock {
           })
           .catch(err => {
             if (this.q.get(localKey).fns.length > 0) {
-              this.q.get(localKey).fns = [];
+              this.q.get(localKey).fns.shift()();
             }
 
             deferredReject(err);
@@ -118,7 +122,7 @@ export default class SimpleLock {
         })
         .catch(err => {
           if (this.q.get(key).fns.length > 0) {
-            this.q.get(key).fns = [];
+            this.q.get(key).fns.shift()();
           }
 
           deferredReject(err);
@@ -127,7 +131,7 @@ export default class SimpleLock {
         });
     };
 
-    if (!this.q.has(key)) {
+    if (!this.q.has(key) || this.q.get(key).isEmpty()) {
       this.q.reset(key);
       exec();
     } else {

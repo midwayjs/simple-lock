@@ -83,9 +83,13 @@ describe('simple lock', () => {
     const lock = new SimpleLock();
 
     let ee;
+    let aftere;
     try {
       await lock.acquire('hello', async () => {
-        (lock as any).q.get('hello').fns.push(() => console.log('test'));
+        (lock as any).q.get('hello').fns.push(() => {
+          console.log('test');
+          aftere = 'test';
+        });
 
         throw new Error('11');
       });
@@ -93,6 +97,7 @@ describe('simple lock', () => {
       ee = e.message;
     }
 
+    assert.deepEqual(aftere, 'test');
     assert.deepEqual(ee, '11');
     assert.deepEqual((lock as any).q.get('hello').fns.length, 0);
   });
