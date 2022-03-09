@@ -131,7 +131,10 @@ export default class SimpleLock {
         });
     };
 
-    if (!this.q.has(key) || this.q.get(key).isEmpty()) {
+    if (
+      !this.q.has(key) ||
+      (this.q.get(key).isEmpty() && this.q.get(key).resolved)
+    ) {
       this.q.reset(key);
       exec();
     } else {

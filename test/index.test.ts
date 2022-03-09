@@ -76,7 +76,24 @@ describe('simple lock', () => {
     const rets = await Promise.all(arr);
     assert.deepEqual([0, 1, 2], rets);
     assert(3 === i);
-    assert.deepEqual([11, 2, 3], data);
+    assert.deepStrictEqual([11, 2, 3], data);
+
+    let id = 0;
+    const fn = async () => {
+      if (id === 1) {
+        return id;
+      }
+      return id++;
+    };
+
+    const arr1 = [
+      lock.acquire('bbb', fn),
+      lock.acquire('bbb', fn),
+      lock.acquire('bbb', fn),
+      lock.acquire('bbb', fn),
+    ];
+    await Promise.all(arr1);
+    assert.equal(id, 1);
   });
 
   it('acquire throw error should be ok', async () => {
